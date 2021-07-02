@@ -6,6 +6,7 @@ import { formatCurrency } from '../utils/helperFunctions';
 
 const ShipmentInfoSection = ({result}) => {
 
+    // destructure state from result prop.
     const {quotePrice, startingCountry, destinationCountry, shippingChannel,  start, end, rangeStart, rangeInterval} = result;
 
     return (
@@ -39,6 +40,7 @@ const ShipmentInfoSection = ({result}) => {
         </StyledShipmentInfo>
     )
 }
+// custom shipment info styles
 const StyledShipmentInfo = styled.div`
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -100,6 +102,8 @@ const StyledShipmentInfo = styled.div`
     height: 80%;
     font-size: 40px;
 }
+
+// responsive media queries styling
 @media only screen and (max-width: 600px) {
     display: block;
     border: none;

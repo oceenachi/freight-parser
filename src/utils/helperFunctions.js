@@ -1,7 +1,8 @@
+// custom function to validate inputs
 export const validateInputs = (quoteData, quoteDataStructure) => {
 
     let errors = {error: false, data: {}};
-
+    // validate presence of value 
     for (let keys of quoteDataStructure) {
 
         if(!quoteData[keys]) {
@@ -11,6 +12,7 @@ export const validateInputs = (quoteData, quoteDataStructure) => {
 
             errors.data[keys] = "field is required";
         }
+        // extra number validation
         if(keys === 'quotePrice' && quoteData[keys]){
             if(isNaN(quoteData[keys])) {
                 errors.error = true;
@@ -25,37 +27,42 @@ export const validateInputs = (quoteData, quoteDataStructure) => {
     return {...errors};
 }
 
-
+// method to generate delivery dates
 export const checkDelivery = (shippingChannel) => {
 
     let result = {start: "", end: ""}
     let dateToday = Date.now();
 
-    let rangeStart = 3 + generateRandom(4);
-    let rangeInterval = 2 + generateRandom(2);
-    
-
-    if (shippingChannel === 'ocean') {
-
-        rangeStart = 25 + generateRandom(5);
-        rangeInterval = 5 + generateRandom(5);
+    // generate start and end range for ocean
+    let rangeStart = 25 + generateRandom(5);
+    let rangeInterval = 5 + generateRandom(5);
+   
+    // generate start and end range for air
+    if (shippingChannel === 'air') {
+        rangeStart = 3 + generateRandom(4);
+        rangeInterval = 2 + generateRandom(2);
+       
     }
 
-        let newStart = new Date(dateToday + rangeStart * 24 * 60 * 60 * 1000);
-        let newEnd = new Date(dateToday + (rangeStart + rangeInterval) * 24 * 60 * 60 * 1000);
+    // set shipment start and end dates
 
-        let shipmentDateStart = newStart.toLocaleString('default', { month: 'short' }) + " " + newStart.getDate();
-        let shipmentDateEnd = newEnd.toLocaleString('default', { month: 'short' }) + " " + newEnd.getDate();
-        
+    let newStart = new Date(dateToday + rangeStart * 24 * 60 * 60 * 1000);
+    let newEnd = new Date(dateToday + (rangeStart + rangeInterval) * 24 * 60 * 60 * 1000);
 
-        return {...result, start: shipmentDateStart, end: shipmentDateEnd, rangeStart, rangeInterval}
+    let shipmentDateStart = newStart.toLocaleString('default', { month: 'short' }) + " " + newStart.getDate();
+    let shipmentDateEnd = newEnd.toLocaleString('default', { month: 'short' }) + " " + newEnd.getDate();
+    
+
+    return {...result, start: shipmentDateStart, end: shipmentDateEnd, rangeStart, rangeInterval}
 
     } 
 
-    function generateRandom(val) { // min and max included 
+    // random number generator
+    function generateRandom(val) {  
         return Math.floor(Math.random() * (val + 1))
     }
 
+    // currency format function
     export const formatCurrency = (amount) => {
 
             let str = (+amount).toString();

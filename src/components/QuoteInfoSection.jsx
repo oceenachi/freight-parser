@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 const QuoteSection = ({quoteData, setQuoteData, createQuote, errors}) => {
 
+    //custom function to handle input change
     const handleChange = (e) => {
-
         let data  = {...quoteData, [e.target.name] : e.target.value};
         setQuoteData(data);
     }
@@ -46,6 +46,8 @@ const QuoteSection = ({quoteData, setQuoteData, createQuote, errors}) => {
         </StyledQuote>
     )
 }
+
+// custom styles for QuoteInfo component
 const StyledQuote = styled.div`
 
 input[type=text], select, label{
