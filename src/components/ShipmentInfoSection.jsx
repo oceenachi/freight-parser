@@ -2,35 +2,37 @@ import React from 'react';
 import styled from 'styled-components';
 import {FaShip} from "react-icons/fa";
 import {IoAirplane} from "react-icons/io5";
-import {TiArrowRight} from "react-icons/ti";
+import { formatCurrency } from '../utils/helperFunctions';
 
-const ShipmentInfoSection = ({freightType}) => {
+const ShipmentInfoSection = ({result}) => {
+
+    const {quotePrice, startingCountry, destinationCountry, shippingChannel,  start, end, rangeStart, rangeInterval} = result;
+
     return (
         <StyledShipmentInfo>
             <div className="quote-box-left">
                 <div className="quote-box-left__header">
-                    {freightType === 'Ocean' ? <FaShip color={'#0070fe'} size={50} style={{marginRight: '5px'}} /> : <IoAirplane color={'#0070fe'} size={50} style={{marginRight: '5px'}}/>}
-  {`Traditional ${freightType} freight`}
+                    {shippingChannel === 'ocean' ? <FaShip className="quote-box__icon" size={50} /> : <IoAirplane className="quote-box__icon" size={50} />}
+                {`Traditional ${shippingChannel} freight`}
                 </div>
                 <div className="quote-box-left__body">
-                    <p className="quote-box-left__subtitle">4-6 days</p>
+                    <p className="quote-box-left__subtitle">{`${rangeStart} - ${rangeStart + rangeInterval} days`}</p>
                     <div className="quote-box-left__text">
                         <p>Estimated delivery</p>
-                        <span>Oct 10 - Oct 12</span>
+                        <span>{`${start} - ${end}`}</span>
 
                     </div>
                  
-
                 </div>
 
             </div>
             <div className="quote-box-right">
                 <div className="quote-box-right__header">
-                    China <TiArrowRight color={'#fff'}/> USA
+                    {`${startingCountry} -> ${destinationCountry}`}
 
                 </div>
                 <div className="quote-box-right__body">
-                    <p>US$ 40,000</p>
+                    <p>US$ {formatCurrency(quotePrice)}</p>
                 </div>
             </div>
             
@@ -38,22 +40,26 @@ const ShipmentInfoSection = ({freightType}) => {
     )
 }
 const StyledShipmentInfo = styled.div`
-display: grid;
-grid-template-columns: 1fr 2fr;
-/* width: 91%; */
-font-size: 14px;
-border: 1px black solid;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    font-size: 14px;
+    border: 1px black solid;
 
 .quote-box-left{
-border-right: 1px black solid;
+    border-right: 1px black solid;
+    min-width: 230px;
+
 }
 .quote-box-left__header{
     display: flex;
     align-items: center;
-    border-bottom: 1px black solid;
+    border-bottom: 1px black solid; 
     padding-left: 10px;
 }
-
+.quote-box__icon{
+    margin-right: 5px;
+    color:#0070fe;
+}
 .quote-box-left__body{
     display: flex;
     flex-direction: column;
@@ -72,16 +78,12 @@ border-right: 1px black solid;
 .quote-box-left__text{
     font-size: 15px;
     text-align: center;
+    margin: 10px 0;
     span{
         font-weight: bold;
     }
 }
 
-
-
-.quote-box-right{
-    /* border: 1px black solid; */
-}
 .quote-box-right__header{
     height: 20%;
     font-weight: 600;
@@ -97,6 +99,31 @@ border-right: 1px black solid;
     align-items: center;
     height: 80%;
     font-size: 40px;
+}
+@media only screen and (max-width: 600px) {
+    display: block;
+    border: none;
+
+    .quote-box-left, .quote-box-right {
+        border: 1px black solid;
+        margin-bottom: 20px;
+    }
+    .quote-box-left {
+        margin-bottom: 20px;
+    }
+    .quote-box-left__header {
+        justify-content: center;
+    }
+    .quote-box-right__header{
+    }
+     .quote-box-right {
+         height: 150px;
+    }
+    .quote-box-right__body{
+        p{
+            font-size: 35px;
+        }
+    }
 }
 
 `;
