@@ -1,8 +1,8 @@
-import React, {useState} from 'react'
-import styled from 'styled-components'
-import { checkDelivery, validateInputs } from '../utils/helperFunctions'
-import QuoteSection from './QuoteInfoSection'
-import ShipmentInfoSection from './ShipmentInfoSection'
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import { checkDelivery, validateInputs } from '../utils/helperFunctions';
+import QuoteSection from './QuoteInfoSection';
+import ShipmentInfoSection from './ShipmentInfoSection';
 
 
 // Parent body rendering input section and shipment details
