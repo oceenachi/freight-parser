@@ -7,7 +7,7 @@ import { formatCurrency } from '../utils/helperFunctions';
 const ShipmentInfoSection = ({result}) => {
 
     // destructure state from result prop.
-    const {quotePrice, startingCountry, destinationCountry, shippingChannel,  start, end, rangeStart, rangeInterval} = result;
+    const {quotePrice, startingCountry, destinationCountry, shippingChannel,  start, end, rangeStart, rangeEnd} = result;
 
     return (
         <StyledShipmentInfo>
@@ -17,7 +17,7 @@ const ShipmentInfoSection = ({result}) => {
                 {`Traditional ${shippingChannel} freight`}
                 </div>
                 <div className="quote-box-left__body">
-                    <p className="quote-box-left__subtitle">{`${rangeStart} - ${rangeStart + rangeInterval} days`}</p>
+                    <p className="quote-box-left__subtitle">{`${rangeStart} - ${rangeEnd} days`}</p>
                     <div className="quote-box-left__text">
                         <p>Estimated delivery</p>
                         <span>{`${start} - ${end}`}</span>
