@@ -1,48 +1,53 @@
 import React from 'react';
 import styled from "styled-components";
 
-const QuoteSection = ({quoteData, setQuoteData, createQuote, errors}) => {
+const QuoteSection = ({ quoteData, setQuoteData, createQuote, errors, channelData }) => {
 
     //custom function to handle input change
     const handleChange = (e) => {
-        let data  = {...quoteData, [e.target.name] : e.target.value};
+        let data = { ...quoteData, [e.target.name]: e.target.value };
         setQuoteData(data);
     }
+  
+
 
     return (
         <StyledQuote>
             <div className="quote-forminput__wrapper">
                 <label htmlFor="startingCountry">Starting country</label>
-                <input type="text" name="startingCountry" onChange={(e)=> handleChange(e)}/>
+                <input type="text" name="startingCountry" onChange={(e) => handleChange(e)} />
                 <span className="error">{errors.error && errors.data.startingCountry}</span>
 
             </div>
-           
-           <div className="quote-forminput__wrapper">
-                 <label htmlFor="destinationCountry">Destination country</label>
-                <input type="text" name="destinationCountry" onChange={(e)=> handleChange(e)}/>
+
+            <div className="quote-forminput__wrapper">
+                <label htmlFor="destinationCountry">Destination country</label>
+                <input type="text" name="destinationCountry" onChange={(e) => handleChange(e)} />
                 <span className="error">{errors.error && errors.data.destinationCountry}</span>
 
-           </div>
-            
+            </div>
+
             <div className="quote-forminput__wrapper">
                 <label htmlFor="quotePrice">Quote price</label>
-                <input type="text" name="quotePrice" onChange={(e)=> handleChange(e)}/>
+                <input type="text" name="quotePrice" onChange={(e) => handleChange(e)} />
                 <span className="error">{errors.error && errors.data.quotePrice}</span>
             </div>
             <div>
                 <label htmlFor="shippingChannel">Shipping Channel</label>
-                <select name="shippingChannel" id="shippingChannel" onChange={(e)=> handleChange(e)}>
-                    <option value="ocean">Ocean</option>
-                    <option value="air">Air</option>
+                <select name="shippingChannel" id="shippingChannel" onChange={(e) => handleChange(e)}>
+                    { channelData.map((channel, index)=> {
+                        return <option key={index} value={channel.channel}>{channel.displayString}</option>
+                        
+                    })}
+                
                 </select>
                 <span className="error">{errors.error && errors.data.shippingChannel}</span>
 
             </div>
 
             <button onClick={() => createQuote()}>Create quote</button>
-            
-            
+
+
         </StyledQuote>
     )
 }
