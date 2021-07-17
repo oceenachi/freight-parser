@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import { checkDelivery, validateInputs } from '../utils/helperFunctions';
 import QuoteSection from './QuoteInfoSection';
@@ -9,9 +9,22 @@ import ShipmentInfoSection from './ShipmentInfoSection';
 const ParentSection = () => {
 
     // set initial states for variable states
-    const [quoteData, setQuoteData] = useState({shippingChannel: "ocean"});
+    const [quoteData, setQuoteData] = useState({shippingChannel: "air"});
     const [result, setResult] = useState({calculated:false});
     const [errors, setErrors] = useState({});
+
+    const [channelData, setChannelData] = useState([]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            const channelData = [{ channel: "air", displayString: "Air", imgUrl: "./assets/plane.png", minDays: 1, maxDays: 2 },
+            { channel: "ocean", displayString: "Ocean", imgUrl: "./assets/ship.png", minDays: 5, maxDays: 10 },
+            { channel: "rail", displayString: "Rail", imgUrl: "./assets/ship.png", minDays: 10, maxDays: 20 }]
+            setChannelData(channelData);
+
+        }, 3000);
+
+    }, [])
 
     // set structure for quote info validation
     const quoteDataStructure = ["destinationCountry", "quotePrice", "shippingChannel", "startingCountry"];
@@ -19,6 +32,8 @@ const ParentSection = () => {
     const createQuote = () => {
 
         //call validation function on inputs 
+        // console.log({channelData})
+        
         let validationResult = validateInputs(quoteData, quoteDataStructure);
         if(validationResult.error){
 
@@ -29,12 +44,12 @@ const ParentSection = () => {
             }, 5000)
             return;
         }
-        setResult((!errors.error) && {...checkDelivery(quoteData.shippingChannel), ...quoteData, calculated: true});
+        setResult((!errors.error) && {...checkDelivery(quoteData.shippingChannel, channelData), ...quoteData, calculated: true});
     }
 
     return (
         <StyledParent>
-            <QuoteSection quoteData={quoteData} setQuoteData={setQuoteData} errors={errors} createQuote={createQuote}/>
+            <QuoteSection quoteData={quoteData} setQuoteData={setQuoteData} errors={errors} channelData={channelData} createQuote={createQuote}/>
             {result.calculated && <ShipmentInfoSection result={result} /> }
             
         </StyledParent>
