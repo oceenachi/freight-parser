@@ -7,19 +7,22 @@ export const validateInputs = (quoteData, quoteDataStructure) => {
 
         if(!quoteData[keys]) {
 
-
             errors.error = true;
 
             errors.data[keys] = "field is required";
         }
+
         // extra number validation
         if(keys === 'quotePrice' && quoteData[keys]){
+            if(quoteData[keys] <= 0){
+                errors.error = true;
+                errors.data[keys] = "Enter a positive number";
+            }
             if(isNaN(quoteData[keys])) {
                 errors.error = true;
 
                 errors.data[keys] = "Enter a valid number";
             }
-
 
         }
     }
@@ -28,39 +31,31 @@ export const validateInputs = (quoteData, quoteDataStructure) => {
 }
 
 // method to generate delivery dates
-export const checkDelivery = (shippingChannel) => {
+export const checkDelivery = (shippingChannel, channelData) => {
+
+    let channelDetails = setChannelInfo(channelData);
 
     let result = {start: "", end: ""}
     let dateToday = Date.now();
 
-    // generate start and end range for ocean
-    let rangeStart = 25 + generateRandom(5);
-    let rangeInterval = 5 + generateRandom(5);
-   
-    // generate start and end range for air
-    if (shippingChannel === 'air') {
-        rangeStart = 3 + generateRandom(4);
-        rangeInterval = 2 + generateRandom(2);
-       
-    }
+    // generate defined intervals
+    let channelRange =  channelDetails[shippingChannel];
+
+    let rangeStart = channelRange[1];
+    let rangeEnd = channelRange[0];
+
 
     // set shipment start and end dates
-
     let newStart = new Date(dateToday + rangeStart * 24 * 60 * 60 * 1000);
-    let newEnd = new Date(dateToday + (rangeStart + rangeInterval) * 24 * 60 * 60 * 1000);
+    let newEnd = new Date(dateToday + rangeEnd  * 24 * 60 * 60 * 1000);
 
     let shipmentDateStart = newStart.toLocaleString('default', { month: 'short' }) + " " + newStart.getDate();
     let shipmentDateEnd = newEnd.toLocaleString('default', { month: 'short' }) + " " + newEnd.getDate();
-    
 
-    return {...result, start: shipmentDateStart, end: shipmentDateEnd, rangeStart, rangeInterval}
+    return {...result, start: shipmentDateStart, end: shipmentDateEnd, rangeStart, rangeEnd}
 
     } 
 
-    // random number generator
-    function generateRandom(val) {  
-        return Math.floor(Math.random() * (val + 1))
-    }
 
     // currency format function
     export const formatCurrency = (amount) => {
@@ -70,4 +65,17 @@ export const checkDelivery = (shippingChannel) => {
             return str.split('').reduce((a, b, i) => a + (i && !((str.length - i) % 3) ? ',' : '') + b,
                 ''
             )
+    }
+
+
+    export const setChannelInfo =(channelData)=>{
+        let resultObj = {};
+        for(let i=0; i < channelData.length; i++){
+            let newArr = [];
+            newArr.push(channelData[i].maxDays);
+            newArr.push(channelData[i].minDays);
+
+            resultObj[channelData[i].channel] = newArr;
+        }
+        return resultObj;
     }
